@@ -172,7 +172,7 @@ export class PrescriptionManager {
   public checkAllergyContraindications(
     patientId: string,
     medicationName: string
-  ): { hasCon traindication: boolean; details?: string } {
+  ): { hasContraindication: boolean; details?: string } {
     const patientData = this.patientMedications.get(patientId);
     if (!patientData) {
       return { hasContraindication: false };

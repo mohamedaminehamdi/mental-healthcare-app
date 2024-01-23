@@ -321,7 +321,7 @@ export class HIPAAComplianceAuditor {
       auditor: 'Security Team'
     };
 
-    const byCat egory: Record<HIPAACategory, HIPAAControl[]> = {
+    const byCategory: Record<HIPAACategory, HIPAAControl[]> = {
       [HIPAACategory.ADMINISTRATIVE_SAFEGUARDS]: [],
       [HIPAACategory.PHYSICAL_SAFEGUARDS]: [],
       [HIPAACategory.TECHNICAL_SAFEGUARDS]: [],

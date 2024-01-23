@@ -14,18 +14,18 @@ export interface TokenBlacklist {
   userId: string;
 }
 
+export interface RefreshTokenData {
+  userId: string;
+  familyId: string;
+  issuedAt: Date;
+  expiresAt: Date;
+  rotation: number;
+}
+
 export class EnhancedJWTManager {
   private blacklist: Set<string> = new Set();
   private tokenRotationSchedule: Map<string, Date> = new Map();
   private refreshTokens: Map<string, RefreshTokenData> = new Map();
-
-  public interface RefreshTokenData {
-    userId: string;
-    familyId: string;
-    issuedAt: Date;
-    expiresAt: Date;
-    rotation: number;
-  }
 
   // Token rotation implementation
   public async rotateTokenFamily(userId: string): Promise<{

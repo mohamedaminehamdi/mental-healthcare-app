@@ -285,7 +285,7 @@ export class ProductionHardening {
     };
   }
 
-  public getSecurity SignOffDocument(): object {
+  public getSecuritySignOffDocument(): object {
     return {
       documentTitle: 'Security Sign-Off for Production Deployment',
       applicationName: 'Mental Healthcare App',

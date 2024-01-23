@@ -33,7 +33,7 @@ export interface HealthAlert {
   severity: 'warning' | 'alert' | 'critical';
   message: string;
   metrics: { [key: string]: number };
-  recomm endations: string[];
+  recommendations: string[];
   timestamp: Date;
 }
 

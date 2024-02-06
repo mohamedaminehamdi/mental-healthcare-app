@@ -52,7 +52,7 @@ class SecurityLogger {
    */
   logSecurityEvent(
     level: LogLevel,
-    event: SecurityEvent,
+    event: SecurityEvent | string,
     userId?: string,
     ipAddress?: string,
     details?: Record<string, any>
@@ -73,6 +73,38 @@ class SecurityLogger {
     if (level === LogLevel.CRITICAL || level === LogLevel.ERROR) {
       this.notifySecurityTeam(logEntry);
     }
+  }
+
+  /**
+   * General-purpose logging used across the lib modules
+   */
+  log(message: string, details?: unknown): void {
+    this.logMessage(LogLevel.INFO, message, details);
+  }
+
+  info(message: string, details?: unknown): void {
+    this.logMessage(LogLevel.INFO, message, details);
+  }
+
+  warn(message: string, details?: unknown): void {
+    this.logMessage(LogLevel.WARN, message, details);
+  }
+
+  error(message: string, details?: unknown): void {
+    this.logMessage(LogLevel.ERROR, message, details);
+  }
+
+  private logMessage(level: LogLevel, message: string, details?: unknown): void {
+    const asRecord =
+      details instanceof Error
+        ? { error: details.message }
+        : details !== null && typeof details === "object"
+          ? (details as Record<string, any>)
+          : details === undefined
+            ? undefined
+            : { value: details };
+
+    this.logSecurityEvent(level, message, undefined, undefined, asRecord);
   }
 
   /**
@@ -109,8 +141,8 @@ class SecurityLogger {
    */
   private writeLog(entry: LogEntry): void {
     if (process.env.NODE_ENV === "production") {
-      // Send to logging service (CloudWatch, ELK, Datadog, etc.)
-      // console.log(JSON.stringify(entry));
+      // One JSON line per entry so the host's log drain can parse it
+      console.log(JSON.stringify(entry));
     } else {
       console.log(`[${entry.level.toUpperCase()}] ${entry.event}`, entry);
     }

@@ -347,7 +347,7 @@ export class FinalSecurityReview {
     ];
   }
 
-  public generateFinalReview(): object {
+  public generateFinalReview() {
     const checklist = this.getComprehensiveChecklist();
     const verified = checklist.filter(item => item.verified).length;
     const total = checklist.length;

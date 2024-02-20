@@ -214,7 +214,7 @@ export class SIEMManager {
    * Correlate events to detect patterns
    */
   private correlateWithIncidents(event: SecurityEvent): void {
-    let correlatedIncident = null;
+    let correlatedIncident: SecurityIncident | null = null as SecurityIncident | null;
 
     this.incidents.forEach(incident => {
       if (
@@ -279,7 +279,7 @@ export class SIEMManager {
    * Generate SIEM dashboard
    */
   public generateDashboard(): {
-    metrics: typeof this.dashboardMetrics;
+    metrics: SIEMManager['dashboardMetrics'];
     activeIncidents: number;
     openAlerts: number;
     threatsMonitored: number;

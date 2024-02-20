@@ -125,7 +125,7 @@ export function runSecurityChecklist(): {
   const items = SECURITY_CHECKLIST.map((item) => ({
     id: item.id,
     name: item.name,
-    passed: item.check(),
+    passed: Boolean(item.check()),
   }));
 
   const passed = items.filter((item) => item.passed).length;

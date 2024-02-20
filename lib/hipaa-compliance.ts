@@ -314,7 +314,7 @@ export class HIPAAComplianceAuditor {
   private controls: HIPAAControl[] = HIPAA_CONTROLS;
   private auditDate: Date = new Date();
 
-  public performAudit(): object {
+  public performAudit() {
     const results = {
       auditDate: this.auditDate,
       organization: 'Mental Healthcare App',

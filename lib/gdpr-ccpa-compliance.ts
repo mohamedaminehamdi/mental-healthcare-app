@@ -231,7 +231,7 @@ export class MultiJurisdictionalComplianceValidator {
   private gdprControls: GDPRCompliance[] = GDPR_REQUIREMENTS;
   private ccpaControls: CCPACompliance[] = CCPA_REQUIREMENTS;
 
-  public validateGDPRCompliance(): object {
+  public validateGDPRCompliance() {
     const compliant = this.gdprControls.filter(c => c.status === 'COMPLIANT').length;
     const total = this.gdprControls.length;
     const rate = Math.round((compliant / total) * 100);
@@ -260,7 +260,7 @@ export class MultiJurisdictionalComplianceValidator {
     };
   }
 
-  public validateCCPACompliance(): object {
+  public validateCCPACompliance() {
     const compliant = this.ccpaControls.filter(c => c.status === 'COMPLIANT').length;
     const total = this.ccpaControls.length;
     const rate = Math.round((compliant / total) * 100);

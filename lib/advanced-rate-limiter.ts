@@ -48,7 +48,7 @@ class AdvancedRateLimiter {
   private buckets: Map<string, RateLimitBucket> = new Map();
   private violations: Map<string, RateLimitViolation> = new Map();
   private config: ThrottleConfig;
-  private cleanupInterval: NodeJS.Timer | null = null;
+  private cleanupInterval: ReturnType<typeof setInterval> | null = null;
 
   private constructor() {
     this.config = DEFAULT_THROTTLE_CONFIG;

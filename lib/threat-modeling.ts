@@ -298,7 +298,7 @@ class ThreatModelingService {
     }
 
     model.riskAssessment = {
-      criticalsThreats: risks.critical,
+      criticalThreats: risks.critical,
       highThreats: risks.high,
       mediumThreats: risks.medium,
       lowThreats: risks.low,

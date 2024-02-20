@@ -47,8 +47,8 @@ export async function hashData(data: string): Promise<string> {
   }
 
   // Server-side: Use crypto module
-  const crypto = require("crypto");
-  return crypto.createHash("sha256").update(data).digest("hex");
+  const nodeCrypto = require("crypto");
+  return nodeCrypto.createHash("sha256").update(data).digest("hex");
 }
 
 /**
@@ -91,8 +91,8 @@ export function generateSecureToken(length: number = 32): string {
   }
 
   // Server-side
-  const crypto = require("crypto");
-  return crypto.randomBytes(length).toString("hex");
+  const nodeCrypto = require("crypto");
+  return nodeCrypto.randomBytes(length).toString("hex");
 }
 
 /**

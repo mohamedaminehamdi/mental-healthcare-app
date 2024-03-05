@@ -232,7 +232,7 @@ export class RealTimeStreamingManager {
           processor.eventsProcessed++;
 
           // Calculate latency
-          const latency = Date.now() - startTime.getTime();
+          const latency = Date.now() - startTime;
           this.metrics.averageLatency =
             (this.metrics.averageLatency +
               latency) /

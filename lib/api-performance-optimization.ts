@@ -146,7 +146,7 @@ export class APIPerformanceOptimizer {
       let compression: string | null = null;
       if (
         acceptEncoding.includes('br') &&
-        this.compressionConfig.algorithm === 'grotli'
+        this.compressionConfig.algorithm === 'brotli'
       ) {
         compression = 'br';
       } else if (acceptEncoding.includes('gzip')) {
@@ -161,9 +161,7 @@ export class APIPerformanceOptimizer {
 
       // Capture original send
       const originalSend = res.send;
-      res.send = function(
-        data: any
-      ) {
+      res.send = (data: any) => {
         // Track performance
         const endpoint = req.path || 'unknown';
         const startTime = (res.locals.startTime as number) || Date.now();
@@ -178,7 +176,7 @@ export class APIPerformanceOptimizer {
         // Only compress if size threshold met and matching MIME type
         const contentType = res.getHeader('content-type') as string || '';
         const isCompressible =
-          this.compressionConfig.types.some(type =>
+          this.compressionConfig.types.some((type: string) =>
             contentType.includes(type)
           );
 
@@ -198,8 +196,8 @@ export class APIPerformanceOptimizer {
           }
         }
 
-        return originalSend.call(this, data);
-      }.bind(this);
+        return originalSend.call(res, data);
+      };
 
       next();
     };

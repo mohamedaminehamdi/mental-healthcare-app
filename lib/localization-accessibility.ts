@@ -16,10 +16,9 @@ export type SupportedLanguage =
   | 'ar'
   | 'hi';
 
-export interface LocalizationEntry {
-  key: string;
+export type LocalizationEntry = { key: string } & {
   [language in SupportedLanguage]?: string;
-}
+};
 
 export interface AccessibilityFeatures {
   screenReaderSupport: boolean;

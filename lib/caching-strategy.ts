@@ -112,50 +112,41 @@ export class AdvancedCacheManager<T> {
     let keyToEvict: string | null = null;
 
     switch (this.config.strategy) {
-      case 'LRU':
+      case 'LRU': {
         // Evict least recently used
-        let lruEntry: CacheEntry<T> | null = null;
-        let lruTime = Date.now();
-
-        this.cache.forEach(entry => {
+        let lruTime = Infinity;
+        for (const [key, entry] of this.cache) {
           if (entry.lastAccessed.getTime() < lruTime) {
-            lruEntry = entry;
+            keyToEvict = key;
             lruTime = entry.lastAccessed.getTime();
           }
-        });
-
-        keyToEvict = lruEntry?.key || null;
+        }
         break;
+      }
 
-      case 'LFU':
+      case 'LFU': {
         // Evict least frequently used
-        let lfuEntry: CacheEntry<T> | null = null;
         let minCount = Infinity;
-
-        this.cache.forEach(entry => {
+        for (const [key, entry] of this.cache) {
           if (entry.accessCount < minCount) {
-            lfuEntry = entry;
+            keyToEvict = key;
             minCount = entry.accessCount;
           }
-        });
-
-        keyToEvict = lfuEntry?.key || null;
+        }
         break;
+      }
 
-      case 'FIFO':
+      case 'FIFO': {
         // Evict oldest (first in, first out)
-        let fifoEntry: CacheEntry<T> | null = null;
-        let oldestTime = Date.now();
-
-        this.cache.forEach(entry => {
+        let oldestTime = Infinity;
+        for (const [key, entry] of this.cache) {
           if (entry.createdAt.getTime() < oldestTime) {
-            fifoEntry = entry;
+            keyToEvict = key;
             oldestTime = entry.createdAt.getTime();
           }
-        });
-
-        keyToEvict = fifoEntry?.key || null;
+        }
         break;
+      }
 
       case 'TTL':
         // Evict expired entries first

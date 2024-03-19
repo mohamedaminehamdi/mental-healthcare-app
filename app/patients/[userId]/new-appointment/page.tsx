@@ -4,7 +4,8 @@ import Navbar from "@/components/Navbar";
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 
-const Appointment = async ({ params: { userId } }: SearchParamProps) => {
+const Appointment = async ({ params }: SearchParamProps) => {
+  const { userId } = await params;
   const patient = await getPatient(userId);
 
   return (

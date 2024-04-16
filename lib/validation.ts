@@ -7,11 +7,11 @@ import {
 } from "./sanitization";
 
 // Custom string schema with sanitization
-const sanitizedString = (minLen?: number, maxLen?: number) =>
+const sanitizedString = (minLen = 1, maxLen?: number) =>
   z
     .string()
     .trim()
-    .min(minLen || 1, `Must be at least ${minLen || 1} character(s)`)
+    .min(minLen, `Must be at least ${minLen} character(s)`)
     .max(maxLen || 500, `Must be at most ${maxLen || 500} characters`)
     .transform((val) => sanitizeString(val, maxLen || 500));
 

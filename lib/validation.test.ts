@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   CancelAppointmentSchema,
   CreateAppointmentSchema,
+  PatientFormValidation,
   UserFormValidation,
 } from "./validation";
 
@@ -83,5 +84,47 @@ describe("appointment schemas", () => {
     });
 
     expect(result.success).toBe(false);
+  });
+});
+
+describe("optional fields", () => {
+  it("accepts an appointment without a note", () => {
+    const result = CreateAppointmentSchema.safeParse({
+      primaryPhysician: "John Green",
+      schedule: tomorrow(),
+      reason: "Annual check-up",
+      note: "",
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a registration with the optional medical fields left blank", () => {
+    const result = PatientFormValidation.safeParse({
+      name: "Jane Doe",
+      email: "jane@example.com",
+      phone: "+14155552671",
+      birthDate: new Date("1990-05-17"),
+      gender: "Female",
+      address: "14 Main Street, Springfield",
+      occupation: "Teacher",
+      emergencyContactName: "John Doe",
+      emergencyContactNumber: "+14155552672",
+      primaryPhysician: "Leila Cameron",
+      insuranceProvider: "BlueCross",
+      insurancePolicyNumber: "ABC123456",
+      allergies: "",
+      currentMedication: "",
+      familyMedicalHistory: "",
+      pastMedicalHistory: "",
+      identificationType: "Passport",
+      identificationNumber: "",
+      identificationDocument: [],
+      treatmentConsent: true,
+      disclosureConsent: true,
+      privacyConsent: true,
+    });
+
+    expect(result.error?.issues).toBeUndefined();
   });
 });

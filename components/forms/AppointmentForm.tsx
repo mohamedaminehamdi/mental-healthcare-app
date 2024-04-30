@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useEffect } from "react";
+
 import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
 import {
@@ -98,6 +98,8 @@ export const AppointmentForm = ({
         const appointmentToUpdate = {
           userId,
           appointmentId: appointment?.$id!,
+          // Format the SMS in the scheduler's time zone, not the server's
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           appointment: {
             primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
@@ -131,14 +133,7 @@ export const AppointmentForm = ({
     default:
       buttonLabel = "Submit Apppointment";
   }
-  const generateRandomPrice = () => `$${(Math.random() * (70 - 10) + 10).toFixed(0)}`;
-  const selectedDoctor = form.watch("primaryPhysician");
 
-  useEffect(() => {
-    if (selectedDoctor) {
-      form.setValue("price", generateRandomPrice());
-    }
-  }, [selectedDoctor]);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
@@ -175,13 +170,6 @@ export const AppointmentForm = ({
                 </SelectItem>
               ))}
             </CustomFormField>
-            <CustomFormField
-        fieldType={FormFieldType.TEXTAREA}
-        control={form.control}
-        name="price"
-        label="Consultation Price"
-        disabled
-      />
 
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}

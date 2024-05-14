@@ -6,6 +6,10 @@ import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
 
+// Always render on request: the dashboard shows live data and must not be
+// prerendered (and frozen) at build time.
+export const dynamic = "force-dynamic";
+
 const AdminPage = async () => {
   const appointments = await getRecentAppointmentList();
 
@@ -33,28 +37,35 @@ const AdminPage = async () => {
           </p>
         </section>
 
+        {!appointments && (
+          <p className="shad-error text-14-regular" role="alert">
+            Appointments couldn&apos;t be loaded. Check the Appwrite connection
+            and refresh the page.
+          </p>
+        )}
+
         <section className="admin-stat">
           <StatCard
             type="appointments"
-            count={appointments.scheduledCount}
+            count={appointments?.scheduledCount ?? 0}
             label="Scheduled appointments"
             icon={"/assets/icons/appointments.svg"}
           />
           <StatCard
             type="pending"
-            count={appointments.pendingCount}
+            count={appointments?.pendingCount ?? 0}
             label="Pending appointments"
             icon={"/assets/icons/pending.svg"}
           />
           <StatCard
             type="cancelled"
-            count={appointments.cancelledCount}
+            count={appointments?.cancelledCount ?? 0}
             label="Cancelled appointments"
             icon={"/assets/icons/cancelled.svg"}
           />
         </section>
 
-        <DataTable columns={columns} data={appointments.documents} />
+        <DataTable columns={columns} data={appointments?.documents ?? []} />
       </main>
     </div>
   );

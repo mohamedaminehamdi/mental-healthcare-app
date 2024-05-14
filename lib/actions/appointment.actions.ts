@@ -3,8 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { ID, Query } from "node-appwrite";
 
-import { Appointment } from "@/types/appwrite.types";
-
 import {
   APPOINTMENT_COLLECTION_ID,
   DATABASE_ID,
@@ -35,63 +33,34 @@ export const createAppointment = async (
 //  GET RECENT APPOINTMENTS
 export const getRecentAppointmentList = async () => {
   try {
-    const appointments = await databases.listDocuments(
-      DATABASE_ID!,
-      APPOINTMENT_COLLECTION_ID!,
-      [Query.orderDesc("$createdAt")]
-    );
+    // Count each status with its own query: listDocuments returns 25 documents
+    // by default, so counting the returned page under-reported busy clinics.
+    const countByStatus = (status: Status) =>
+      databases
+        .listDocuments(DATABASE_ID!, APPOINTMENT_COLLECTION_ID!, [
+          Query.equal("status", [status]),
+          Query.limit(1),
+        ])
+        .then((result) => result.total);
 
-    // const scheduledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "scheduled");
+    const [appointments, scheduledCount, pendingCount, cancelledCount] =
+      await Promise.all([
+        databases.listDocuments(DATABASE_ID!, APPOINTMENT_COLLECTION_ID!, [
+          Query.orderDesc("$createdAt"),
+          Query.limit(100),
+        ]),
+        countByStatus("scheduled"),
+        countByStatus("pending"),
+        countByStatus("cancelled"),
+      ]);
 
-    // const pendingAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "pending");
-
-    // const cancelledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "cancelled");
-
-    // const data = {
-    //   totalCount: appointments.total,
-    //   scheduledCount: scheduledAppointments.length,
-    //   pendingCount: pendingAppointments.length,
-    //   cancelledCount: cancelledAppointments.length,
-    //   documents: appointments.documents,
-    // };
-
-    const initialCounts = {
-      scheduledCount: 0,
-      pendingCount: 0,
-      cancelledCount: 0,
-    };
-
-    const counts = (appointments.documents as Appointment[]).reduce(
-      (acc, appointment) => {
-        switch (appointment.status) {
-          case "scheduled":
-            acc.scheduledCount++;
-            break;
-          case "pending":
-            acc.pendingCount++;
-            break;
-          case "cancelled":
-            acc.cancelledCount++;
-            break;
-        }
-        return acc;
-      },
-      initialCounts
-    );
-
-    const data = {
+    return parseStringify({
       totalCount: appointments.total,
-      ...counts,
+      scheduledCount,
+      pendingCount,
+      cancelledCount,
       documents: appointments.documents,
-    };
-
-    return parseStringify(data);
+    });
   } catch (error) {
     console.error(
       "An error occurred while retrieving the recent appointments:",

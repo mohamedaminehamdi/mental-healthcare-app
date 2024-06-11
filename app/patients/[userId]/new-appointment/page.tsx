@@ -10,7 +10,7 @@ const Appointment = async ({ params }: SearchParamProps) => {
 
   return (
     <>
-    <Navbar/>
+    <Navbar userId={userId} />
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[860px] flex-1 justify-between">

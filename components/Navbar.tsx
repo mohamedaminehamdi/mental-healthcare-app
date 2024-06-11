@@ -1,16 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { getPatient, getUser } from "@/lib/actions/patient.actions";
-const Navbar: React.FC = () => {
-  const pathname = usePathname(); // Get current path
+
+// The forum and chatbot are separate apps; their links only show when configured.
+const externalLinks = [
+  { href: process.env.NEXT_PUBLIC_FORUM_URL, text: "Community Forum" },
+  { href: process.env.NEXT_PUBLIC_CHATBOT_URL, text: "Chatbot" },
+].filter((link): link is { href: string; text: string } => Boolean(link.href));
+
+const Navbar = ({ userId }: { userId: string }) => {
+  const pathname = usePathname();
+  const appointmentHref = `/patients/${userId}/new-appointment`;
 
   return (
-    
-    <nav className="bg-black shadow-lg py-4 px-6">
-      <div className="max-w-6xl mx-auto flex justify-between items-center">
+    <nav className="bg-black px-6 py-4 shadow-lg">
+      <div className="mx-auto flex max-w-6xl items-center justify-between">
         <Image
           src="/assets/icons/logo-full.svg"
           height={40}
@@ -19,9 +25,14 @@ const Navbar: React.FC = () => {
           className="h-10 w-auto"
         />
         <div className="flex space-x-6">
-          <NavItem href="http://localhost:3000/patients/67a661410015cf19e720/new-appointment" text="New Appointment" activePath={pathname} />
-          <NavItem href="http://localhost:4000/" text="Community Forum" activePath={pathname} />
-          <NavItem href="http://localhost:5001/" text="Chatbot" activePath={pathname} />
+          <NavItem
+            href={appointmentHref}
+            text="New Appointment"
+            active={pathname === appointmentHref}
+          />
+          {externalLinks.map((link) => (
+            <NavItem key={link.text} href={link.href} text={link.text} />
+          ))}
         </div>
       </div>
     </nav>
@@ -31,15 +42,19 @@ const Navbar: React.FC = () => {
 interface NavItemProps {
   href: string;
   text: string;
-  activePath: string;
+  active?: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ href, text, activePath }) => (
-  <Link href={href} className="relative">
+const NavItem = ({ href, text, active = false }: NavItemProps) => (
+  <Link
+    href={href}
+    className="relative"
+    aria-current={active ? "page" : undefined}
+  >
     <span
-      className={`cursor-pointer text-white text-lg transition-all duration-300 ease-in-out ${
-        activePath === href ? "font-bold underline" : "opacity-80"
-      } hover:text-white-300 hover:scale-105`}
+      className={`cursor-pointer text-lg text-white transition-all duration-300 ease-in-out hover:scale-105 ${
+        active ? "font-bold underline" : "opacity-80 hover:opacity-100"
+      }`}
     >
       {text}
     </span>

@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import {
   AlertDialog,
@@ -18,50 +18,36 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { decryptKey, encryptKey } from "@/lib/utils";
+import { verifyAdminPasskey } from "@/lib/actions/admin.actions";
 
 export const PasskeyModal = () => {
   const router = useRouter();
-  const path = usePathname();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [passkey, setPasskey] = useState("");
   const [error, setError] = useState("");
-
-  const encryptedKey =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("accessKey")
-      : null;
-
-  useEffect(() => {
-    const accessKey = encryptedKey && decryptKey(encryptedKey);
-
-    if (path)
-      if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
-        setOpen(false);
-        router.push("/admin");
-      } else {
-        setOpen(true);
-      }
-  }, [encryptedKey]);
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const closeModal = () => {
     setOpen(false);
     router.push("/");
   };
 
-  const validatePasskey = (
+  // The passkey is checked on the server, which sets an httpOnly session cookie
+  const validatePasskey = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    setIsVerifying(true);
 
-    if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
-      const encryptedKey = encryptKey(passkey);
+    const result = await verifyAdminPasskey(passkey);
 
-      localStorage.setItem("accessKey", encryptedKey);
-
+    if (result.ok) {
       setOpen(false);
+      router.push("/admin");
     } else {
-      setError("Invalid passkey. Please try again.");
+      setError(result.error);
+      setPasskey("");
+      setIsVerifying(false);
     }
   };
 
@@ -109,9 +95,10 @@ export const PasskeyModal = () => {
         <AlertDialogFooter>
           <AlertDialogAction
             onClick={(e) => validatePasskey(e)}
+            disabled={passkey.length < 6 || isVerifying}
             className="shad-primary-btn w-full"
           >
-            Enter Admin Passkey
+            {isVerifying ? "Verifying..." : "Enter Admin Passkey"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

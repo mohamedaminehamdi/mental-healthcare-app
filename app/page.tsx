@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { PatientForm } from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
+import { hasAdminSession } from "@/lib/actions/admin.actions";
 
 const Home = async ({ searchParams }: SearchParamProps) => {
   const isAdmin = (await searchParams).admin === "true";
+
+  // Admins with a valid session skip the passkey prompt
+  if (isAdmin && (await hasAdminSession())) redirect("/admin");
 
   return (
     <div className="flex h-screen max-h-screen">

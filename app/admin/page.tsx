@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
+import { hasAdminSession, signOutAdmin } from "@/lib/actions/admin.actions";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
 
 // Always render on request: the dashboard shows live data and must not be
@@ -11,6 +13,9 @@ import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
 export const dynamic = "force-dynamic";
 
 const AdminPage = async () => {
+  // Middleware already checks this; verify again so the page is safe on its own
+  if (!(await hasAdminSession())) redirect("/?admin=true");
+
   const appointments = await getRecentAppointmentList();
 
   return (
@@ -26,7 +31,17 @@ const AdminPage = async () => {
           />
         </Link>
 
-        <p className="text-16-semibold">Admin Dashboard</p>
+        <div className="flex items-center gap-6">
+          <p className="text-16-semibold">Admin Dashboard</p>
+          <form action={signOutAdmin}>
+            <button
+              type="submit"
+              className="text-14-regular text-dark-700 hover:text-white"
+            >
+              Sign out
+            </button>
+          </form>
+        </div>
       </header>
 
       <main className="admin-main">

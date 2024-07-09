@@ -5,6 +5,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+import {
+  ADMIN_SESSION_COOKIE,
+  verifyAdminSessionToken,
+} from "./lib/admin-session";
+
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
   "/",
@@ -49,7 +54,7 @@ function isAdminRoute(pathname: string): boolean {
 /**
  * Main middleware function
  */
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip middleware for public routes
@@ -59,16 +64,21 @@ export function middleware(request: NextRequest) {
 
   // Check for session/auth token
   const authToken = request.cookies.get("authToken")?.value;
-  const userRole = request.cookies.get("userRole")?.value;
 
   // Protected route - must have auth token
   if (isProtectedRoute(pathname) && !authToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // Admin route - must have admin role
-  if (isAdminRoute(pathname) && userRole !== "admin") {
-    return NextResponse.redirect(new URL("/", request.url));
+  // Admin route - must carry a valid signed admin session (set by verifyAdminPasskey)
+  if (
+    isAdminRoute(pathname) &&
+    !(await verifyAdminSessionToken(
+      request.cookies.get(ADMIN_SESSION_COOKIE)?.value,
+      process.env.ADMIN_SESSION_SECRET
+    ))
+  ) {
+    return NextResponse.redirect(new URL("/?admin=true", request.url));
   }
 
   // Prevent access to sensitive paths

@@ -12,6 +12,11 @@ import {
   storage,
   users,
 } from "../appwrite.config";
+import {
+  getFileConfigForType,
+  matchesFileSignature,
+  validateFile,
+} from "../file-validation";
 import { parseStringify } from "../utils";
 
 // CREATE APPWRITE USER
@@ -63,14 +68,24 @@ export const registerPatient = async ({
     // Upload file ->  // https://appwrite.io/docs/references/cloud/client-web/storage#createFile
     let file;
     if (identificationDocument) {
-      const inputFile =
-        identificationDocument &&
-        InputFile.fromBlob(
-          identificationDocument?.get("blobFile") as Blob,
-          identificationDocument?.get("fileName") as string
-        );
+      const blob = identificationDocument.get("blobFile") as Blob;
+      const fileName = identificationDocument.get("fileName") as string;
 
-      file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
+      // The uploader restricts type and size in the browser; enforce it here too
+      const { valid, error } = validateFile(
+        new File([blob], fileName, { type: blob.type }),
+        getFileConfigForType("identification")
+      );
+      if (!valid) throw new Error(error);
+      if (!(await matchesFileSignature(blob))) {
+        throw new Error("File content does not match its type");
+      }
+
+      file = await storage.createFile(
+        BUCKET_ID!,
+        ID.unique(),
+        InputFile.fromBlob(blob, fileName)
+      );
     }
 
     // Create new patient document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument

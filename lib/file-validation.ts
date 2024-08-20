@@ -52,16 +52,30 @@ export function validateFile(
     };
   }
 
-  // Additional check: verify magic bytes (file signature)
-  // This should be done server-side with actual file content
-  const validMagicBytes = {
-    "pdf": [0x25, 0x50, 0x44, 0x46], // %PDF
-    "jpg": [0xff, 0xd8, 0xff],
-    "png": [0x89, 0x50, 0x4e, 0x47],
-    "webp": [0x52, 0x49, 0x46, 0x46],
-  };
-
+  // The content itself is checked server-side by matchesFileSignature
   return { valid: true };
+}
+
+// Leading bytes (file signature) for each allowed MIME type
+const MAGIC_BYTES: Record<string, number[]> = {
+  "application/pdf": [0x25, 0x50, 0x44, 0x46], // %PDF
+  "image/jpeg": [0xff, 0xd8, 0xff],
+  "image/png": [0x89, 0x50, 0x4e, 0x47],
+  "image/webp": [0x52, 0x49, 0x46, 0x46], // RIFF
+};
+
+/**
+ * Check that the file content starts with the signature of its declared type,
+ * so a renamed HTML or executable can't pass as an image or PDF.
+ */
+export async function matchesFileSignature(file: Blob): Promise<boolean> {
+  const signature = MAGIC_BYTES[file.type];
+  if (!signature) return false;
+
+  const head = new Uint8Array(
+    await file.slice(0, signature.length).arrayBuffer()
+  );
+  return signature.every((byte, i) => head[i] === byte);
 }
 
 /**

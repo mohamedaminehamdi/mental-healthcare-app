@@ -2,7 +2,7 @@
 import { E164Number } from "libphonenumber-js/core";
 import Image from "next/image";
 import ReactDatePicker from "react-datepicker";
-import { Control } from "react-hook-form";
+import { Control, FieldPath, FieldValues } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
 
 import { Checkbox } from "./ui/checkbox";
@@ -27,9 +27,13 @@ export enum FormFieldType {
   SKELETON = "skeleton",
 }
 
-interface CustomProps {
-  control: Control<any>;
-  name: string;
+// Generic over the form's values so each form's control and field names type-check
+interface CustomProps<
+  TFieldValues extends FieldValues = FieldValues,
+  TTransformedValues = TFieldValues,
+> {
+  control: Control<TFieldValues, any, TTransformedValues>;
+  name: FieldPath<TFieldValues>;
   label?: string;
   placeholder?: string;
   iconSrc?: string;
@@ -42,7 +46,13 @@ interface CustomProps {
   fieldType: FormFieldType;
 }
 
-const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
+const RenderInput = ({
+  field,
+  props,
+}: {
+  field: any;
+  props: Omit<CustomProps, "control">;
+}) => {
   switch (props.fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -149,7 +159,12 @@ const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   }
 };
 
-const CustomFormField = (props: CustomProps) => {
+const CustomFormField = <
+  TFieldValues extends FieldValues,
+  TTransformedValues = TFieldValues,
+>(
+  props: CustomProps<TFieldValues, TTransformedValues>
+) => {
   const { control, name, label } = props;
 
   return (

@@ -1,9 +1,9 @@
 import { z } from "zod";
+
 import {
   sanitizeString,
   sanitizeEmail,
   sanitizePhoneNumber,
-  sanitizeDate,
 } from "./sanitization";
 
 // Custom string schema with sanitization

@@ -1,5 +1,7 @@
 {
-  "plugins": ["import"],
+  "plugins": [
+    "import"
+  ],
   "extends": [
     "next/core-web-vitals",
     "standard",
@@ -26,5 +28,38 @@
         }
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.mts"
+      ],
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "rules": {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": [
+          "error",
+          {
+            "functions": false,
+            "classes": true,
+            "variables": false,
+            "typedefs": false,
+            "ignoreTypeReferences": true
+          }
+        ]
+      }
+    }
+  ]
 }

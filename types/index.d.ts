@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 // Next.js 15 passes params and searchParams to pages as promises
 declare type SearchParamProps = {
   params: Promise<{ [key: string]: string }>;

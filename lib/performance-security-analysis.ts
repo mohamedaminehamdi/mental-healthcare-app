@@ -180,7 +180,7 @@ export class PerformanceSecurityAnalysis {
     // Mock Zod validation on complex schema
     for (let i = 0; i < 100; i++) {
       // Simulate validation like email, phone, etc.
-      const isValid = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test('test@example.com');
+      const isValid = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test('test@example.com');
     }
     const end = performance.now();
     return end - start;
@@ -320,7 +320,7 @@ export class PerformanceSecurityAnalysis {
     const data = 'Email: test@example.com, SSN: 123-45-6789';
     const redacted = data
       .replace(/\d{3}-\d{2}-\d{4}/g, 'XXX-XX-XXXX')
-      .replace(/[\w\.-]+@[\w\.-]+/g, '[REDACTED_EMAIL]');
+      .replace(/[\w.-]+@[\w.-]+/g, '[REDACTED_EMAIL]');
     const end = performance.now();
     return end - start;
   }

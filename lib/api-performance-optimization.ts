@@ -4,8 +4,9 @@
  * Days 11-12: Improve API performance and response times
  */
 
-import { logger } from './logger';
 import zlib from 'zlib';
+
+import { logger } from './logger';
 
 export interface APIPerformanceMetrics {
   endpoint: string;

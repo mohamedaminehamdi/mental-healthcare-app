@@ -499,7 +499,7 @@ class PenetrationTestingGuide {
       return null;
     }
 
-    const severity_counts = {
+    const severityCounts = {
       critical: test.findings.filter((f) => f.severity === 'critical').length,
       high: test.findings.filter((f) => f.severity === 'high').length,
       medium: test.findings.filter((f) => f.severity === 'medium').length,
@@ -508,10 +508,10 @@ class PenetrationTestingGuide {
 
     const overallRisk = Math.min(
       100,
-      severity_counts.critical * 30 +
-        severity_counts.high * 15 +
-        severity_counts.medium * 5 +
-        severity_counts.low * 1
+      severityCounts.critical * 30 +
+        severityCounts.high * 15 +
+        severityCounts.medium * 5 +
+        severityCounts.low * 1
     );
 
     const resolutionDeadlines = new Map<string, Date>();
@@ -531,10 +531,10 @@ class PenetrationTestingGuide {
       timestamp: new Date(),
       testerName,
       totalFindings: test.findings.length,
-      criticalFindings: severity_counts.critical,
-      highFindings: severity_counts.high,
-      mediumFindings: severity_counts.medium,
-      lowFindings: severity_counts.low,
+      criticalFindings: severityCounts.critical,
+      highFindings: severityCounts.high,
+      mediumFindings: severityCounts.medium,
+      lowFindings: severityCounts.low,
       findings: test.findings,
       overallRisk: Math.round(overallRisk),
       recommendations: this.generateRecommendations(test.findings),

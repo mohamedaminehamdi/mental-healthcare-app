@@ -43,6 +43,7 @@ export class NotificationManager {
     string,
     Array<{ type: NotificationType; channels: string[] }>
   > = new Map();
+
   private alertHistory: HealthAlert[] = [];
 
   /**

@@ -102,7 +102,7 @@ export class AnalyticsEngine {
     }
 
     // Analyze vitals
-    const bpReadings = data.vitals['bloodPressure'] || [];
+    const bpReadings = data.vitals.bloodPressure || [];
     if (bpReadings.length > 0) {
       const avgBP =
         bpReadings.reduce((a, b) => a + b) / bpReadings.length;
@@ -200,7 +200,7 @@ export class AnalyticsEngine {
     // Mock calculation
     let readmissionRisk = 20;
     let hospitalizationRisk = 15;
-    let chronicallyIllRisk = 25;
+    const chronicallyIllRisk = 25;
     const recommendations: string[] = [];
 
     if (data && data.adherenceScore < 70) {

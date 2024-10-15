@@ -59,6 +59,7 @@ export class AdvancedAnalyticsManager {
   private cohorts: Map<string, CohortAnalysis> = new Map();
   private outcomeMetrics: Map<string, HealthOutcomeMetrics> =
     new Map();
+
   private analyticsCache: Map<string, any> = new Map();
   private lastUpdate: Date = new Date();
 

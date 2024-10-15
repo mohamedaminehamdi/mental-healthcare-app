@@ -204,8 +204,8 @@ export class SecretsDetector {
       'GitHub Token': /ghp_[0-9a-zA-Z]{36}/,
       'Slack Token': /xox[baprs]-[0-9]{12}-[0-9]{12}-[0-9a-zA-Z]{32}/,
       'Private Key': /-----BEGIN.*PRIVATE KEY-----/,
-      'Database URL': /mongodb:\/\/[^@]+@[^\/]+/,
-      'API Keys': /api[_-]?key["\']?\s*[:=]\s*["\'][^"\']+["\']/i
+      'Database URL': /mongodb:\/\/[^@]+@[^/]+/,
+      'API Keys': /api[_-]?key["']?\s*[:=]\s*["'][^"']+["']/i
     };
 
     logger.log(`Scanning ${sourceDir} for secrets using ${Object.keys(patterns).length} patterns`);

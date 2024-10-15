@@ -298,7 +298,7 @@ class SecretManager {
     const hasLower = /[a-z]/.test(secret);
     const hasUpper = /[A-Z]/.test(secret);
     const hasNumber = /[0-9]/.test(secret);
-    const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(secret);
+    const hasSpecial = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(secret);
 
     return hasLower && hasUpper && hasNumber && hasSpecial;
   }

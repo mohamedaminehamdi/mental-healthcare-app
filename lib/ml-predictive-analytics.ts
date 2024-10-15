@@ -42,8 +42,10 @@ export class MLPredictiveAnalytics {
   private riskProfiles: Map<string, PatientRiskProfile> = new Map();
   private interactionPredictions: Map<string, DrugInteractionPrediction> =
     new Map();
+
   private readmissionPredictions: Map<string, ReadmissionPrediction> =
     new Map();
+
   private modelPerformance: {
     modelName: string;
     accuracy: number;

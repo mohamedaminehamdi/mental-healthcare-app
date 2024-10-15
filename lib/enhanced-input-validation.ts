@@ -5,6 +5,7 @@
  */
 
 import { z } from 'zod';
+
 import { logger } from './logger';
 
 interface ValidationRule {
@@ -108,7 +109,7 @@ export class EnhancedInputValidator {
       if (pattern.test(input)) {
         threats.push({
           type: 'XSS',
-          pattern: pattern,
+          pattern,
           severity: 'HIGH',
           description: 'HTML/JavaScript injection detected'
         });
@@ -216,7 +217,7 @@ export const HealthcareInputSchemas = {
   phone: z
     .string()
     .regex(/^\+?[\d\s\-()]{10,}$/, 'Invalid phone format'),
-  medicalId: z.string().regex(/^[A-Z0-9\-]{10,20}$/, 'Invalid medical ID'),
+  medicalId: z.string().regex(/^[A-Z0-9-]{10,20}$/, 'Invalid medical ID'),
   prescription: z
     .string()
     .min(10)

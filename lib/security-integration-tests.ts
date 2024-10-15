@@ -496,8 +496,8 @@ export class SecurityIntegrationTestSuite {
     const startTime = new Date();
     let status = TestStatus.PASSED;
     let message = 'Test passed';
-    let evidence: string[] = [];
-    let recommendations: string[] = [];
+    const evidence: string[] = [];
+    const recommendations: string[] = [];
 
     try {
       const passed = await test.implementation();

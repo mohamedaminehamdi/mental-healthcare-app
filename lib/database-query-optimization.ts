@@ -36,6 +36,7 @@ export class QueryOptimizationManager {
     averageExecutionTime: 0,
     slowQueries: []
   };
+
   private slowQueryThreshold = 1000; // ms
 
   constructor(config: QueryOptimizationConfig) {

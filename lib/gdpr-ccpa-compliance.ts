@@ -328,7 +328,7 @@ export class MultiJurisdictionalComplianceValidator {
   public generateComplianceReport(jurisdiction: 'GDPR' | 'CCPA' | 'BOTH'): object {
     const timestamp = new Date();
 
-    let report: object = { timestamp };
+    const report: object = { timestamp };
 
     if (jurisdiction === 'GDPR' || jurisdiction === 'BOTH') {
       Object.assign(report, { gdpr: this.validateGDPRCompliance() });

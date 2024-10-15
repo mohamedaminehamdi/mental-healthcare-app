@@ -34,7 +34,7 @@ export function sanitizeQueryValue(value: any): any {
 
   if (typeof value === "string") {
     // Remove dangerous characters and operators
-    let sanitized = value.trim();
+    const sanitized = value.trim();
 
     // Prevent NoSQL injection
     if (sanitized.includes("{") || sanitized.includes("$")) {

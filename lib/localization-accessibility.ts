@@ -55,7 +55,7 @@ export class LocalizationManager {
       return key;
     }
 
-    let translation = entry[language] || entry['en'] || key;
+    let translation = entry[language] || entry.en || key;
 
     // Replace parameters
     if (params) {

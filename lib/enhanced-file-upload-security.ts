@@ -4,8 +4,9 @@
  * Days 5-6: Advanced file validation and storage security
  */
 
-import { logger } from './logger';
 import crypto from 'crypto';
+
+import { logger } from './logger';
 
 export interface FileValidationConfig {
   maxFileSize: number; // bytes
@@ -257,7 +258,7 @@ export class EnhancedFileUploadManager {
   public sanitizeFilename(filename: string): string {
     return filename
       .replace(/\.\./g, '') // Remove directory traversal
-      .replace(/[\/\\]/g, '') // Remove path separators
+      .replace(/[/\\]/g, '') // Remove path separators
       .replace(/[<>:"|?*]/g, '') // Remove invalid characters
       .replace(/\s+/g, '_') // Replace spaces
       .substring(0, 255); // Limit length

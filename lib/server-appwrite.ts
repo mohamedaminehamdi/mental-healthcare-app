@@ -4,6 +4,7 @@
  */
 
 import * as sdk from "node-appwrite";
+
 import { APPWRITE_CONFIG } from "./appwrite.config";
 
 // Create server-side client with API key

@@ -317,9 +317,11 @@ export class CloudInfrastructureManager {
         selected = healthy[0]; // Simplified
         break;
 
-      case 'weighted':
+      case 'weighted': {
         const totalWeight = healthy.reduce((sum, b) => sum + b.weight, 0);
         let random = Math.random() * totalWeight;
+        // Default to the first backend; the loop replaces it with the weighted pick
+        selected = healthy[0];
         for (const backend of healthy) {
           random -= backend.weight;
           if (random <= 0) {
@@ -327,8 +329,8 @@ export class CloudInfrastructureManager {
             break;
           }
         }
-        selected = healthy[0];
         break;
+      }
 
       case 'ip_hash':
         selected = healthy[0]; // Would use client IP in production

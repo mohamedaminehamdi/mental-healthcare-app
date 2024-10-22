@@ -20,7 +20,6 @@ export function validateRequestHeaders(request: NextRequest): boolean {
   }
 
   // Check for required security headers
-  const referer = request.headers.get("referer");
   const origin = request.headers.get("origin");
 
   // Validate origin for cross-origin requests

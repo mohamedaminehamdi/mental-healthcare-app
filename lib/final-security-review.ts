@@ -5,7 +5,6 @@
  * Day 29: Final Security Review
  */
 
-import { logger } from './logger';
 
 export interface SecurityChecklistItem {
   id: string;

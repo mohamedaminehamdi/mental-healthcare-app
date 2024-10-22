@@ -45,7 +45,7 @@ interface AnomalyScore {
   recommendation: 'allow' | 'challenge' | 'block';
 }
 
-const THREAT_PATTERNS = {
+const _THREAT_PATTERNS = {
   bruteForce: {
     failedAttemptsThreshold: 5,
     timeWindow: 300000, // 5 minutes
@@ -93,7 +93,7 @@ class AdvancedThreatDetector {
     ip: string,
     endpoint: string,
     payload: unknown,
-    statusCode: number
+    _statusCode: number
   ): Promise<{
     anomalyScore?: AnomalyScore;
     threats: ThreatSignal[];
@@ -354,7 +354,7 @@ class AdvancedThreatDetector {
   /**
    * Calculate time-based anomaly
    */
-  private calculateTimeBasedAnomaly(profile: UserBehaviorProfile): number {
+  private calculateTimeBasedAnomaly(_profile: UserBehaviorProfile): number {
     const now = new Date();
     const hour = now.getHours();
 

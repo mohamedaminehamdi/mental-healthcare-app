@@ -52,7 +52,7 @@ export interface SecurityFinding {
 export class SASTAnalyzer {
   private findings: SecurityFinding[] = [];
 
-  public async analyzeSources(sourceDir: string): Promise<SecurityCheckResult> {
+  public async analyzeSources(_sourceDir: string): Promise<SecurityCheckResult> {
     const startTime = Date.now();
     this.findings = [];
 
@@ -79,7 +79,7 @@ export class SASTAnalyzer {
 
   private async checkHardcodedSecrets(): Promise<void> {
     // Detect: API keys, passwords, tokens in source
-    const patterns = [
+    const _patterns = [
       /api[_-]?key\s*[:=]\s*['"]\S+['"]/gi,
       /password\s*[:=]\s*['"]\S+['"]/gi,
       /jwt\s*[:=]\s*['"]\S+['"]/gi,
@@ -93,7 +93,7 @@ export class SASTAnalyzer {
 
   private async checkInsecureFunctions(): Promise<void> {
     // Detect: eval(), exec(), new Function()
-    const insecureFunctions = ['eval', 'exec', 'Function', 'setTimeout', 'setInterval'];
+    const _insecureFunctions = ['eval', 'exec', 'Function', 'setTimeout', 'setInterval'];
     logger.log('SAST: Checking for insecure functions');
     
     // Finding example:

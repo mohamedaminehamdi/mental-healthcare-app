@@ -66,7 +66,7 @@ export class PerformanceSecurityAnalysis {
     // Simulate JWT validation (signature check, expiry check)
     for (let i = 0; i < 1000; i++) {
       // Mock crypto operation
-      const hash = Buffer.from('token').toString('base64');
+      const _hash = Buffer.from('token').toString('base64');
     }
     const end = performance.now();
     return end - start;
@@ -77,7 +77,7 @@ export class PerformanceSecurityAnalysis {
     // Simulate RBAC permission check
     for (let i = 0; i < 100; i++) {
       // Mock permission lookup
-      const permission = ['read', 'write', 'admin'].includes('write');
+      const _permission = ['read', 'write', 'admin'].includes('write');
     }
     const end = performance.now();
     return end - start;
@@ -94,7 +94,7 @@ export class PerformanceSecurityAnalysis {
   private async measureSessionLookup(): Promise<number> {
     const start = performance.now();
     // Simulate Redis/cache lookup
-    const session = { userId: 123, role: 'doctor' };
+    const _session = { userId: 123, role: 'doctor' };
     const end = performance.now();
     return end - start;
   }
@@ -126,7 +126,7 @@ export class PerformanceSecurityAnalysis {
     const start = performance.now();
     // Mock AES-256 encryption on 1MB data
     const data = new Uint8Array(1024 * 1024);
-    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const _iv = crypto.getRandomValues(new Uint8Array(12));
     // Simulate encryption
     for (let i = 0; i < 100; i++) {
       Buffer.from(data).toString('hex');
@@ -180,7 +180,7 @@ export class PerformanceSecurityAnalysis {
     // Mock Zod validation on complex schema
     for (let i = 0; i < 100; i++) {
       // Simulate validation like email, phone, etc.
-      const isValid = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test('test@example.com');
+      const _isValid = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test('test@example.com');
     }
     const end = performance.now();
     return end - start;
@@ -201,7 +201,7 @@ export class PerformanceSecurityAnalysis {
     const start = performance.now();
     // Mock map lookup
     const ips = new Map([['192.168.1.1', 45]]);
-    const count = ips.get('192.168.1.1');
+    const _count = ips.get('192.168.1.1');
     const end = performance.now();
     return end - start;
   }
@@ -263,7 +263,7 @@ export class PerformanceSecurityAnalysis {
     const start = performance.now();
     // Mock input validation for SQL injection
     const input = 'test; DROP TABLE users;';
-    const hasInjection = input.includes(';') || input.includes('--');
+    const _hasInjection = input.includes(';') || input.includes('--');
     const end = performance.now();
     return end - start;
   }
@@ -272,7 +272,7 @@ export class PerformanceSecurityAnalysis {
     const start = performance.now();
     // Mock column-level encryption
     const encryptedValue = Buffer.from('sensitive_data').toString('base64');
-    const decryptedValue = Buffer.from(encryptedValue, 'base64').toString();
+    const _decryptedValue = Buffer.from(encryptedValue, 'base64').toString();
     const end = performance.now();
     return end - start;
   }
@@ -318,7 +318,7 @@ export class PerformanceSecurityAnalysis {
     const start = performance.now();
     // Mock PII redaction
     const data = 'Email: test@example.com, SSN: 123-45-6789';
-    const redacted = data
+    const _redacted = data
       .replace(/\d{3}-\d{2}-\d{4}/g, 'XXX-XX-XXXX')
       .replace(/[\w.-]+@[\w.-]+/g, '[REDACTED_EMAIL]');
     const end = performance.now();
@@ -344,7 +344,7 @@ export class PerformanceSecurityAnalysis {
   private async measureMetricsRecording(): Promise<number> {
     const start = performance.now();
     // Mock metrics push to external service
-    const metric = { name: 'auth_latency_ms', value: 45, timestamp: Date.now() };
+    const _metric = { name: 'auth_latency_ms', value: 45, timestamp: Date.now() };
     // In real scenario, this would be async
     const end = performance.now();
     return end - start;

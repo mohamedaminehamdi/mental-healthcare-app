@@ -151,7 +151,7 @@ class SecurityLogger {
   /**
    * Notify security team of critical events
    */
-  private notifySecurityTeam(entry: LogEntry): void {
+  private notifySecurityTeam(_entry: LogEntry): void {
     // Send alert to security team
     // This could be an email, Slack message, or security monitoring service
     if (process.env.SECURITY_ALERT_WEBHOOK) {

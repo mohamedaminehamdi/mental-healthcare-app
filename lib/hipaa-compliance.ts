@@ -356,6 +356,7 @@ export class HIPAAComplianceAuditor {
     const overallCompliance = Math.round((totalCompliant / totalControls) * 100);
 
     return {
+      ...results,
       summary: {
         totalControls,
         compliant: totalCompliant,

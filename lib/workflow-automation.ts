@@ -219,7 +219,7 @@ export class WorkflowAutomationEngine {
 
   private async executeAction(
     step: WorkflowStep,
-    context: any
+    _context: any
   ): Promise<any> {
     // Simulate action execution
     return {
@@ -232,7 +232,7 @@ export class WorkflowAutomationEngine {
 
   private async sendNotification(
     config: any,
-    context: any
+    _context: any
   ): Promise<void> {
     logger.log('Workflow notification sent', {
       type: config.type,

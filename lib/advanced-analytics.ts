@@ -4,7 +4,6 @@
  * Days 81-86: Advanced analytics, population health, trend analysis, predictive modeling
  */
 
-import { logger } from './logger';
 
 export interface PopulationMetrics {
   totalPatients: number;
@@ -205,7 +204,7 @@ export class AdvancedAnalyticsManager {
       // Simplified matching logic
       return criteria.every(c =>
         Object.entries(p).some(
-          ([key, value]) =>
+          ([key, _value]) =>
             key.toLowerCase().includes(c.toLowerCase())
         )
       );

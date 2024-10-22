@@ -226,7 +226,7 @@ export class AnalyticsEngine {
   /**
    * Get cohort analysis
    */
-  public getCohortAnalysis(criteria: {
+  public getCohortAnalysis(_criteria: {
     ageRange?: [number, number];
     condition?: string;
   }): {

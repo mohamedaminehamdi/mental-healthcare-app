@@ -5,7 +5,6 @@
  * Day 30: Production Hardening & Security Sign-Off
  */
 
-import { logger } from './logger';
 
 export interface HardeningStep {
   step: number;

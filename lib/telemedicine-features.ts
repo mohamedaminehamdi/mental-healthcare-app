@@ -147,7 +147,7 @@ export class TeleconsultationManager {
   /**
    * Get session chat history
    */
-  public async getSessionChat(sessionId: string): Promise<
+  public async getSessionChat(_sessionId: string): Promise<
     Array<{
       sender: string;
       message: string;

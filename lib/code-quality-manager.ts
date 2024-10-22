@@ -4,7 +4,6 @@
  * Days 43-46: Final quality assurance and documentation polish
  */
 
-import { logger } from './logger';
 
 export interface CodeQualityMetrics {
   maintainability: number; // 0-100

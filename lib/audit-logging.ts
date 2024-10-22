@@ -181,7 +181,7 @@ export class AuditLoggingManager {
   }
 
   private getComplianceChecklist(
-    framework: string
+    _framework: string
   ): ComplianceReport['checklist'] {
     // Framework-specific requirements
     const hipaaRequirements = [

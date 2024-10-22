@@ -92,7 +92,7 @@ export class AdvancedSchedulingEngine {
   public findAvailableSlots(
     specialty: string,
     preferredDate: Date,
-    duration: number = 30
+    _duration: number = 30
   ): TimeSlot[] {
     const availableSlots: TimeSlot[] = [];
 
@@ -219,7 +219,7 @@ export class AdvancedSchedulingEngine {
     }
   }
 
-  private calculatePriority(patientId: string): number {
+  private calculatePriority(_patientId: string): number {
     // Mock implementation - could consider patient history, condition severity, etc.
     return Math.random() * 100;
   }

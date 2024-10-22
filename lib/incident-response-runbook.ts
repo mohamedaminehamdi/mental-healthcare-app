@@ -5,7 +5,6 @@
  * Day 28: Incident Response Runbook
  */
 
-import { logger } from './logger';
 
 export type IncidentSeverity = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 export type IncidentType = 

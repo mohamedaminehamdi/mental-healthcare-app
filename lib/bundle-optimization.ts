@@ -4,8 +4,6 @@
  * Days 10-11: Reduce frontend bundle and improve load times
  */
 
-import fs from 'fs';
-import path from 'path';
 
 export interface BundleAnalysis {
   totalSize: number;

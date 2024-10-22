@@ -6,7 +6,7 @@
  * Encrypt sensitive data (for transit and storage)
  * Note: For production, use a proper encryption library like crypto-js or libsodium
  */
-export function encryptSensitiveData(data: string, key?: string): string {
+export function encryptSensitiveData(data: string, _key?: string): string {
   // This is a placeholder. In production, use:
   // - TweetNaCl.js for public key encryption
   // - crypto-js for symmetric encryption
@@ -25,7 +25,7 @@ export function encryptSensitiveData(data: string, key?: string): string {
 /**
  * Decrypt sensitive data
  */
-export function decryptSensitiveData(encryptedData: string, key?: string): string {
+export function decryptSensitiveData(encryptedData: string, _key?: string): string {
   try {
     return Buffer.from(encryptedData, "base64").toString("utf-8");
   } catch {

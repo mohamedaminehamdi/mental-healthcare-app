@@ -5,7 +5,6 @@
  * Day 26: Deployment & Launch Security
  */
 
-import { logger } from './logger';
 
 export interface DeploymentSecurityCheckpoint {
   phase: string;

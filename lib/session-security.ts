@@ -21,7 +21,7 @@ export const DEFAULT_SESSION_CONFIG: SessionConfig = {
  */
 export function validateSessionToken(
   token: string,
-  config: SessionConfig = DEFAULT_SESSION_CONFIG
+  _config: SessionConfig = DEFAULT_SESSION_CONFIG
 ): { valid: boolean; expired?: boolean } {
   if (!token || typeof token !== "string") {
     return { valid: false };

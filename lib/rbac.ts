@@ -143,7 +143,7 @@ export function canAccessResource(
 export function filterDataByRole<T extends Record<string, any>>(
   data: T[],
   userRole: UserRole,
-  resource: string
+  _resource: string
 ): T[] {
   // Patient can only see their own data
   if (userRole === "patient") {

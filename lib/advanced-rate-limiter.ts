@@ -224,7 +224,7 @@ class AdvancedRateLimiter {
     }
 
     return {
-      allowed: bucket.requests <= limit,
+      allowed,
       requests: bucket.requests,
       resetTime: bucket.resetTime,
     };
@@ -265,8 +265,7 @@ class AdvancedRateLimiter {
   /**
    * Manual bypass for trusted sources
    */
-  addTrustedSource(ip: string, duration: number = 86400000): void {
-    const key = `trusted:${ip}`;
+  addTrustedSource(ip: string, _duration: number = 86400000): void {
     this.buckets.delete(`ip:${ip}`);
     this.violations.delete(`penalty:${ip}`);
     console.log(`Added trusted source: ${ip}`);

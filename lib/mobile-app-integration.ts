@@ -96,7 +96,7 @@ export class MobileAppBridge {
   /**
    * Get pending sync operations
    */
-  public getPendingSync(userId: string): SyncQueue[] {
+  public getPendingSync(_userId: string): SyncQueue[] {
     return Array.from(this.syncQueue.values()).filter(
       item => item.status === 'pending'
     );

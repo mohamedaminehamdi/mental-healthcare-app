@@ -160,15 +160,15 @@ export class ZeroTrustManager {
     };
   }
 
-  private evaluateDeviceTrust(deviceId: string): number {
+  private evaluateDeviceTrust(_deviceId: string): number {
     // Check if device is registered and compliant
     // Mock: return 85 for registered devices
     return 85;
   }
 
   private evaluateLocationTrust(
-    userId: string,
-    location: { lat: number; lng: number }
+    _userId: string,
+    _location: { lat: number; lng: number }
   ): number {
     // Check if location is consistent with user history
     // Mock: return 75 for expected locations
@@ -184,7 +184,7 @@ export class ZeroTrustManager {
     return 40; // High risk outside working hours
   }
 
-  private evaluateBehaviorTrust(userId: string): number {
+  private evaluateBehaviorTrust(_userId: string): number {
     // Check for anomalous behavior patterns
     // Mock: return 80 for normal behavior
     return 80;

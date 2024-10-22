@@ -173,7 +173,7 @@ export class MLPredictiveAnalytics {
 
   private calculateCostRisk(
     medicalHistory: any,
-    demographics: any
+    _demographics: any
   ): number {
     let score = 0;
 
@@ -341,7 +341,7 @@ export class MLPredictiveAnalytics {
     );
   }
 
-  private getEvidenceBase(drug1: string, drug2: string): string[] {
+  private getEvidenceBase(_drug1: string, _drug2: string): string[] {
     return [
       `FDA drug interaction database`,
       `Clinical trial data (n=${Math.floor(Math.random() * 1000) + 100})`,

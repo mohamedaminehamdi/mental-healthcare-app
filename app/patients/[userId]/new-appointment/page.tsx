@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 import { AppointmentForm } from "@/components/forms/AppointmentForm";
 import Navbar from "@/components/Navbar";
@@ -8,6 +9,9 @@ const Appointment = async ({ params }: SearchParamProps) => {
   const { userId } = await params;
   const patient = await getPatient(userId);
 
+  // Booking needs a patient record; without one the form silently did nothing
+  if (!patient) redirect(`/patients/${userId}/register`);
+
   return (
     <>
       <Navbar userId={userId} />
@@ -15,7 +19,7 @@ const Appointment = async ({ params }: SearchParamProps) => {
         <section className="remove-scrollbar container my-auto">
           <div className="sub-container max-w-[860px] flex-1 justify-between">
             <AppointmentForm
-              patientId={patient?.$id}
+              patientId={patient.$id}
               userId={userId}
               type="create"
             />

@@ -7,7 +7,7 @@ export default function Loading() {
         src="/assets/icons/loader.svg"
         alt="loader"
         width={40}
-        height={3240}
+        height={40}
         className="animate-spin"
       />
       Loading...

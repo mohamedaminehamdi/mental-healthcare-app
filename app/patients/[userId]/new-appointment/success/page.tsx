@@ -77,7 +77,9 @@ const RequestSuccess = async ({ searchParams, params }: SearchParamProps) => {
           </Link>
         </Button>
 
-        <p className="copyright">© 2024 CarePluse</p>
+        <p className="copyright">
+          © {new Date().getFullYear()} CarePulse
+        </p>
       </div>
     </div>
   );

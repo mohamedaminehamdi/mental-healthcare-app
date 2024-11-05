@@ -21,13 +21,15 @@ const Register = async ({ params }: SearchParamProps) => {
             src="/assets/icons/logo-full.svg"
             height={1000}
             width={1000}
-            alt="patient"
+            alt="CarePulse"
             className="mb-12 h-10 w-fit"
           />
 
           <RegisterForm user={user} />
 
-          <p className="copyright py-12">© 2024 CarePluse</p>
+          <p className="copyright py-12">
+            © {new Date().getFullYear()} CarePulse
+          </p>
         </div>
       </section>
 
@@ -35,7 +37,7 @@ const Register = async ({ params }: SearchParamProps) => {
         src="/assets/images/register-img.png"
         height={1000}
         width={1000}
-        alt="patient"
+        alt=""
         className="side-img max-w-[390px]"
       />
     </div>

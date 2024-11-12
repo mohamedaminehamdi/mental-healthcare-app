@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      # Placeholders: the build checks these exist but never calls Appwrite
+      NEXT_PUBLIC_ENDPOINT: https://cloud.appwrite.io/v1
+      PROJECT_ID: ci
+      API_KEY: ci
+      DATABASE_ID: ci
+      PATIENT_COLLECTION_ID: ci
+      DOCTOR_COLLECTION_ID: ci
+      APPOINTMENT_COLLECTION_ID: ci
+      NEXT_PUBLIC_BUCKET_ID: ci
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

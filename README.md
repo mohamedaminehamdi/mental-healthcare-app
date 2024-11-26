@@ -67,14 +67,14 @@ Follow these steps to set up the project locally on your machine.
 Make sure you have the following installed on your machine:
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en)
+- [Node.js](https://nodejs.org/en) 22 or newer
 - [npm](https://www.npmjs.com/) (Node Package Manager)
 
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/mohamedaminehamdi/MentalHealthCareApp.git
-cd MentalHealthCareApp
+git clone https://github.com/mohamedaminehamdi/mental-healthcare-app.git
+cd mental-healthcare-app
 ```
 
 **Installation**
@@ -87,22 +87,23 @@ npm install
 
 **Set Up Environment Variables**
 
-Create a new file named `.env.local` in the root of your project and add the following content:
+Copy the example file and fill in the values:
 
-```env
-#APPWRITE
-NEXT_PUBLIC_ENDPOINT=https://cloud.appwrite.io/v1
-PROJECT_ID=
-API_KEY=
-DATABASE_ID=
-PATIENT_COLLECTION_ID=
-APPOINTMENT_COLLECTION_ID=
-NEXT_PUBLIC_BUCKET_ID=
-
-NEXT_PUBLIC_ADMIN_PASSKEY=111111
+```bash
+cp .env.example .env.local
 ```
 
-Replace the placeholder values with your actual Appwrite credentials. You can obtain these credentials by signing up on the [Appwrite website](https://appwrite.io/).
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_ENDPOINT`, `PROJECT_ID`, `API_KEY` | Yes | Appwrite endpoint, project and server API key |
+| `DATABASE_ID`, `PATIENT_COLLECTION_ID`, `DOCTOR_COLLECTION_ID`, `APPOINTMENT_COLLECTION_ID` | Yes | Appwrite database and collections |
+| `NEXT_PUBLIC_BUCKET_ID` | Yes | Storage bucket for identification documents |
+| `ADMIN_PASSKEY` | For `/admin` | 6-digit passkey, checked on the server only |
+| `ADMIN_SESSION_SECRET` | For `/admin` | Signs the admin session cookie (`openssl rand -hex 32`) |
+| `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | No | Error reporting and source map upload |
+| `NEXT_PUBLIC_FORUM_URL`, `NEXT_PUBLIC_CHATBOT_URL` | No | Navbar links to the companion apps |
+
+You can get the Appwrite credentials by signing up on the [Appwrite website](https://appwrite.io/). The admin passkey is never sent to the browser: it is verified by a server action, which then sets an httpOnly session cookie.
 
 **Running the Project**
 
@@ -111,6 +112,17 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
+
+**Checks**
+
+```bash
+npm run lint       # ESLint
+npm run typecheck  # TypeScript
+npm test           # Vitest unit tests
+npm run build      # production build
+```
+
+The same checks run in GitHub Actions on every push and pull request.
 
 ## <a name="snippets">🕸️ Snippets</a>
 

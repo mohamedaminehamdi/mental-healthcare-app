@@ -98,8 +98,8 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_ENDPOINT`, `PROJECT_ID`, `API_KEY` | Yes | Appwrite endpoint, project and server API key |
 | `DATABASE_ID`, `PATIENT_COLLECTION_ID`, `DOCTOR_COLLECTION_ID`, `APPOINTMENT_COLLECTION_ID` | Yes | Appwrite database and collections |
 | `NEXT_PUBLIC_BUCKET_ID` | Yes | Storage bucket for identification documents |
+| `SESSION_SECRET` | Yes | Signs the admin and patient session cookies (`openssl rand -hex 32`) |
 | `ADMIN_PASSKEY` | For `/admin` | 6-digit passkey, checked on the server only |
-| `ADMIN_SESSION_SECRET` | For `/admin` | Signs the admin session cookie (`openssl rand -hex 32`) |
 | `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | No | Error reporting and source map upload |
 | `NEXT_PUBLIC_FORUM_URL`, `NEXT_PUBLIC_CHATBOT_URL` | No | Navbar links to the companion apps |
 

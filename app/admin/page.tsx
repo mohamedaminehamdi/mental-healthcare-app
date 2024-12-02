@@ -5,8 +5,9 @@ import { redirect } from "next/navigation";
 import { StatCard } from "@/components/StatCard";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/DataTable";
-import { hasAdminSession, signOutAdmin } from "@/lib/actions/admin.actions";
+import { signOutAdmin } from "@/lib/actions/admin.actions";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
+import { hasAdminSession } from "@/lib/auth";
 
 // Always render on request: the dashboard shows live data and must not be
 // prerendered (and frozen) at build time.

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { PatientForm } from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
-import { hasAdminSession } from "@/lib/actions/admin.actions";
+import { hasAdminSession } from "@/lib/auth";
 
 const Home = async ({ searchParams }: SearchParamProps) => {
   const isAdmin = (await searchParams).admin === "true";

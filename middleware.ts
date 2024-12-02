@@ -5,10 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  ADMIN_SESSION_COOKIE,
-  verifyAdminSessionToken,
-} from "./lib/admin-session";
+import { ADMIN_SESSION, ADMIN_SUBJECT, verifySessionToken } from "./lib/session";
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -73,9 +70,10 @@ export async function middleware(request: NextRequest) {
   // Admin route - must carry a valid signed admin session (set by verifyAdminPasskey)
   if (
     isAdminRoute(pathname) &&
-    !(await verifyAdminSessionToken(
-      request.cookies.get(ADMIN_SESSION_COOKIE)?.value,
-      process.env.ADMIN_SESSION_SECRET
+    !(await verifySessionToken(
+      request.cookies.get(ADMIN_SESSION.cookie)?.value,
+      ADMIN_SUBJECT,
+      process.env.SESSION_SECRET
     ))
   ) {
     return NextResponse.redirect(new URL("/?admin=true", request.url));

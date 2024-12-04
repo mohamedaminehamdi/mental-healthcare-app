@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { ID, InputFile, Query } from "node-appwrite";
 
 import {
@@ -8,41 +9,113 @@ import {
   ENDPOINT,
   PATIENT_COLLECTION_ID,
   PROJECT_ID,
+  account,
   databases,
   storage,
   users,
 } from "../appwrite.config";
+import { startPatientSession } from "../auth";
 import {
   getFileConfigForType,
   matchesFileSignature,
   validateFile,
 } from "../file-validation";
+import { checkRateLimit } from "../rate-limit";
 import { parseStringify } from "../utils";
 
-// CREATE APPWRITE USER
-export const createUser = async (user: CreateUserParams) => {
+// ponytail: in-memory limits are per server instance; use a shared store (Redis) if you scale out
+const CODE_SEND_LIMIT = { windowMs: 15 * 60 * 1000, maxRequests: 3 };
+const CODE_VERIFY_LIMIT = { windowMs: 15 * 60 * 1000, maxRequests: 5 };
+
+const withinLimit = async (
+  key: string,
+  limit: { windowMs: number; maxRequests: number }
+) => {
+  const request = new Request("http://internal", { headers: await headers() });
+  return checkRateLimit(request, { ...limit, keyGenerator: () => key }).allowed;
+};
+
+type SignInResult =
+  | { status: "signed-in"; userId: string }
+  | { status: "verify"; userId: string }
+  | { status: "error"; error: string };
+
+// SIGN IN OR SIGN UP
+// New patients are signed in as soon as their account exists. Existing accounts
+// must confirm a code that Appwrite emails them, so knowing an email isn't enough.
+export const signInPatient = async (
+  user: CreateUserParams
+): Promise<SignInResult> => {
   try {
-    // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
-    const newuser = await users.create(
+    // https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
+    const newUser = await users.create(
       ID.unique(),
       user.email,
       user.phone,
       undefined,
       user.name
     );
-
-    return parseStringify(newuser);
+    await startPatientSession(newUser.$id);
+    return { status: "signed-in", userId: newUser.$id };
   } catch (error: any) {
-    // Check existing user
-    if (error && error?.code === 409) {
-      const existingUser = await users.list([
-        Query.equal("email", [user.email]),
-      ]);
-
-      return existingUser.users[0];
+    if (error?.code !== 409) {
+      console.error("An error occurred while creating a new user:", error);
+      return { status: "error", error: "Something went wrong. Please try again." };
     }
-    console.error("An error occurred while creating a new user:", error);
   }
+
+  // 409: the email or the phone number is already registered
+  try {
+    const existing = await users.list([Query.equal("email", [user.email])]);
+    const existingUser = existing.users[0];
+    if (!existingUser) {
+      return {
+        status: "error",
+        error: "This phone number is already registered with another email.",
+      };
+    }
+
+    if (!(await withinLimit(`code-send:${existingUser.$id}`, CODE_SEND_LIMIT))) {
+      return {
+        status: "error",
+        error: "Too many codes requested. Please wait a few minutes.",
+      };
+    }
+
+    // Emails the account a 6-digit code (valid for 15 minutes)
+    await account.createEmailToken(existingUser.$id, user.email);
+    return { status: "verify", userId: existingUser.$id };
+  } catch (error) {
+    console.error("An error occurred while sending a sign-in code:", error);
+    return {
+      status: "error",
+      error: "We couldn't send a sign-in code. Please try again.",
+    };
+  }
+};
+
+// VERIFY EMAILED CODE
+export const verifyPatientCode = async (
+  userId: string,
+  code: string
+): Promise<{ ok: true } | { ok: false; error: string }> => {
+  if (!(await withinLimit(`code-verify:${userId}`, CODE_VERIFY_LIMIT))) {
+    return {
+      ok: false,
+      error: "Too many attempts. Please request a new code later.",
+    };
+  }
+
+  try {
+    const session = await account.createSession(userId, code);
+    // Only the check matters: the app uses its own cookie, so drop Appwrite's session
+    await users.deleteSession(userId, session.$id);
+  } catch {
+    return { ok: false, error: "That code is invalid or has expired." };
+  }
+
+  await startPatientSession(userId);
+  return { ok: true };
 };
 
 // GET USER

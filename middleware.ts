@@ -5,7 +5,13 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { ADMIN_SESSION, ADMIN_SUBJECT, verifySessionToken } from "./lib/session";
+import {
+  ADMIN_SESSION,
+  ADMIN_SUBJECT,
+  PATIENT_SESSION,
+  patientSubject,
+  verifySessionToken,
+} from "./lib/session";
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -14,29 +20,14 @@ const PUBLIC_ROUTES = [
   "/patients",
 ];
 
-// Routes that require authentication
-const PROTECTED_ROUTES = [
-  "/admin",
-  "/api/appointments",
-  "/patients/[userId]/register",
-  "/patients/[userId]/new-appointment",
-];
+// Patient pages (/patients/<userId>/...): only the session of that patient may open them
+const PATIENT_ROUTE = /^\/patients\/([^/]+)\/(register|new-appointment)(\/|$)/;
 
 // Admin only routes
 const ADMIN_ROUTES = [
   "/admin",
   "/api/appointments/list",
 ];
-
-/**
- * Check if a route requires authentication
- */
-function isProtectedRoute(pathname: string): boolean {
-  return PROTECTED_ROUTES.some((route) => {
-    const pattern = new RegExp(`^${route.replace("[userId]", "[^/]+")}(/|$)`);
-    return pattern.test(pathname);
-  });
-}
 
 /**
  * Check if a route is admin only
@@ -59,11 +50,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for session/auth token
-  const authToken = request.cookies.get("authToken")?.value;
-
-  // Protected route - must have auth token
-  if (isProtectedRoute(pathname) && !authToken) {
+  // Patient page - must carry a signed session for the patient in the URL
+  // (set by signInPatient / verifyPatientCode)
+  const patientId = PATIENT_ROUTE.exec(pathname)?.[1];
+  if (
+    patientId &&
+    !(await verifySessionToken(
+      request.cookies.get(PATIENT_SESSION.cookie)?.value,
+      patientSubject(patientId),
+      process.env.SESSION_SECRET
+    ))
+  ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

@@ -74,3 +74,21 @@ export async function hasPatientSession(userId: string) {
     sessionSecret()
   );
 }
+
+// Server actions are public endpoints that bypass middleware, so each one
+// checks the caller itself with these.
+export async function requireAdmin() {
+  if (!(await hasAdminSession())) throw new Error("Admin session required");
+}
+
+export async function requirePatient(userId: string) {
+  if (!(await hasPatientSession(userId))) {
+    throw new Error("Patient session required");
+  }
+}
+
+export async function requirePatientOrAdmin(userId: string) {
+  if (!(await hasPatientSession(userId)) && !(await hasAdminSession())) {
+    throw new Error("Patient or admin session required");
+  }
+}

@@ -3,12 +3,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getRecentAppointmentList } from "./appointment.actions";
 
 const listDocuments = vi.fn();
+const requireAdmin = vi.hoisted(() => vi.fn());
 
 vi.mock("../appwrite.config", () => ({
   DATABASE_ID: "db",
   APPOINTMENT_COLLECTION_ID: "appointments",
   databases: { listDocuments: (...args: unknown[]) => listDocuments(...args) },
   messaging: {},
+}));
+vi.mock("../auth", () => ({
+  requireAdmin,
+  requirePatient: vi.fn(),
+  requirePatientOrAdmin: vi.fn(),
 }));
 
 const totals: Record<string, number> = {
@@ -19,6 +25,7 @@ const totals: Record<string, number> = {
 
 describe("getRecentAppointmentList", () => {
   beforeEach(() => {
+    requireAdmin.mockReset();
     listDocuments.mockReset();
     listDocuments.mockImplementation(
       async (_db: string, _collection: string, queries: string[]) => {
@@ -43,6 +50,14 @@ describe("getRecentAppointmentList", () => {
       cancelledCount: 9,
       documents: [{ $id: "a1" }, { $id: "a2" }],
     });
+  });
+
+  it("refuses callers without an admin session", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    requireAdmin.mockRejectedValue(new Error("Admin session required"));
+
+    await expect(getRecentAppointmentList()).resolves.toBeUndefined();
+    expect(listDocuments).not.toHaveBeenCalled();
   });
 
   it("returns undefined when Appwrite is unavailable", async () => {

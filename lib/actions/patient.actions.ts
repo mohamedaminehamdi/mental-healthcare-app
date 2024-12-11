@@ -14,7 +14,7 @@ import {
   storage,
   users,
 } from "../appwrite.config";
-import { startPatientSession } from "../auth";
+import { requirePatient, startPatientSession } from "../auth";
 import {
   getFileConfigForType,
   matchesFileSignature,
@@ -121,6 +121,7 @@ export const verifyPatientCode = async (
 // GET USER
 export const getUser = async (userId: string) => {
   try {
+    await requirePatient(userId);
     const user = await users.get(userId);
 
     return parseStringify(user);
@@ -138,6 +139,8 @@ export const registerPatient = async ({
   ...patient
 }: RegisterUserParams) => {
   try {
+    await requirePatient(patient.userId);
+
     // Upload file ->  // https://appwrite.io/docs/references/cloud/client-web/storage#createFile
     let file;
     if (identificationDocument) {
@@ -184,6 +187,7 @@ export const registerPatient = async ({
 // GET PATIENT
 export const getPatient = async (userId: string) => {
   try {
+    await requirePatient(userId);
     const patients = await databases.listDocuments(
       DATABASE_ID!,
       PATIENT_COLLECTION_ID!,

@@ -96,7 +96,6 @@ export const AppointmentForm = ({
         }
       } else {
         const appointmentToUpdate = {
-          userId,
           appointmentId: appointment?.$id!,
           // Format the SMS in the scheduler's time zone, not the server's
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,

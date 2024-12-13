@@ -75,6 +75,10 @@ export async function hasPatientSession(userId: string) {
   );
 }
 
+export async function endPatientSession() {
+  (await cookies()).delete(PATIENT_SESSION.cookie);
+}
+
 // Server actions are public endpoints that bypass middleware, so each one
 // checks the caller itself with these.
 export async function requireAdmin() {

@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { ID, InputFile, Query } from "node-appwrite";
 
 import {
@@ -14,7 +15,7 @@ import {
   storage,
   users,
 } from "../appwrite.config";
-import { requirePatient, startPatientSession } from "../auth";
+import { endPatientSession, requirePatient, startPatientSession } from "../auth";
 import {
   getFileConfigForType,
   matchesFileSignature,
@@ -116,6 +117,12 @@ export const verifyPatientCode = async (
 
   await startPatientSession(userId);
   return { ok: true };
+};
+
+// SIGN OUT
+export const signOutPatient = async () => {
+  await endPatientSession();
+  redirect("/");
 };
 
 // GET USER

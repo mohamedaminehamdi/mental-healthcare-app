@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { signOutPatient } from "@/lib/actions/patient.actions";
+
 // The forum and chatbot are separate apps; their links only show when configured.
 const externalLinks = [
   { href: process.env.NEXT_PUBLIC_FORUM_URL, text: "Community Forum" },
@@ -33,6 +35,14 @@ const Navbar = ({ userId }: { userId: string }) => {
           {externalLinks.map((link) => (
             <NavItem key={link.text} href={link.href} text={link.text} />
           ))}
+          <form action={signOutPatient}>
+            <button
+              type="submit"
+              className="text-lg text-white opacity-80 hover:opacity-100"
+            >
+              Sign out
+            </button>
+          </form>
         </div>
       </div>
     </nav>

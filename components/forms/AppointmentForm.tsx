@@ -40,7 +40,11 @@ export const AppointmentForm = ({
 
   const AppointmentFormValidation = getAppointmentSchema(type);
 
-  const form = useForm<z.infer<typeof AppointmentFormValidation>>({
+  const form = useForm<
+    z.input<typeof AppointmentFormValidation>,
+    unknown,
+    z.output<typeof AppointmentFormValidation>
+  >({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
       primaryPhysician: appointment ? appointment?.primaryPhysician : "",

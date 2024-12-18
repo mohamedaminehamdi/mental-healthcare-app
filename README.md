@@ -103,7 +103,13 @@ cp .env.example .env.local
 | `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | No | Error reporting and source map upload |
 | `NEXT_PUBLIC_FORUM_URL`, `NEXT_PUBLIC_CHATBOT_URL` | No | Navbar links to the companion apps |
 
-You can get the Appwrite credentials by signing up on the [Appwrite website](https://appwrite.io/). The admin passkey is never sent to the browser: it is verified by a server action, which then sets an httpOnly session cookie.
+You can get the Appwrite credentials by signing up on the [Appwrite website](https://appwrite.io/). The server API key needs the `users.read`, `users.write`, `sessions.write`, `documents.read`, `documents.write`, `files.write` and `messages.write` scopes.
+
+**How sign-in works**
+
+- **Patients:** a new patient is signed in when the welcome form creates their account. When the email already belongs to an account, Appwrite emails that account a 6-digit code, which the patient enters to continue. Appwrite Cloud sends these emails out of the box; a self-hosted Appwrite needs SMTP configured.
+- **Admins:** `/?admin=true` asks for the passkey, which is checked by a server action and never sent to the browser.
+- Both get an httpOnly cookie signed with `SESSION_SECRET` and bound to that patient or to the admin role. Middleware checks it before rendering `/patients/<userId>/…` and `/admin`, and every server action checks it again.
 
 **Running the Project**
 
